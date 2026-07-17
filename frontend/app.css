@@ -68,6 +68,17 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   border-radius: 20px; padding: 3px 10px; color: var(--muted); text-decoration: none; }
 .source-chip.doc { border-color: var(--accent2); }
 .source-chip a { color: inherit; text-decoration: none; }
+.page-view-btn { font-size: 12px; padding: 3px 9px; border-radius: 20px;
+  background: var(--panel2); border: 1px solid var(--accent); color: var(--accent); }
+.page-view-btn:hover { background: var(--accent); color: #fff; }
+#img-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8);
+  display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+#img-box { background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  max-width: 92vw; max-height: 92vh; overflow: auto; padding: 14px; }
+#img-cap { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+#img-body img { max-width: 100%; height: auto; border-radius: 6px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.5); background: #fff; }
+
 #ask-form { display: flex; gap: 10px; padding: 14px 20px;
   border-top: 1px solid var(--border); background: var(--panel); }
 #ask-input { resize: none; flex: 1; }

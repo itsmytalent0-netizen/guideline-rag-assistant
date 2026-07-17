@@ -15,6 +15,7 @@ from .routes_admin import router as admin_router
 from .routes_auth import router as auth_router
 from .routes_chat import router as chat_router
 from .routes_meta import router as meta_router
+from .routes_pages import router as pages_router
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -53,6 +54,7 @@ app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(admin_router)
 app.include_router(meta_router)
+app.include_router(pages_router)
 
 if _mcp_app is not None:
     app.mount("/mcp", _mcp_app)

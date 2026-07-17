@@ -162,10 +162,53 @@ function renderSources(sources) {
     chip.className = "source-chip " + (s.kind === "doc" ? "doc" : "web");
     chip.textContent = `[${s.n}] ${s.title}`.slice(0, 90);
     if (s.url) { chip.href = s.url; chip.target = "_blank"; chip.rel = "noopener"; }
-    chip.title = s.title;
+    chip.title = s.kind === "doc" ? "Open the source file in Google Drive" : s.title;
     wrap.appendChild(chip);
+    // For document sources, add a "view page" button that shows the rendered page image.
+    if (s.kind === "doc" && s.doc_id && s.page_start) {
+      const view = document.createElement("button");
+      view.className = "page-view-btn";
+      view.textContent = "🖼 p." + s.page_start;
+      view.title = "View a screenshot of the reference page";
+      view.onclick = () => showPageImage(s.doc_id, s.page_start, s.title);
+      wrap.appendChild(view);
+    }
   }
   return wrap;
+}
+
+async function showPageImage(docId, page, title) {
+  let overlay = document.getElementById("img-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "img-overlay";
+    overlay.onclick = () => overlay.classList.add("hidden");
+    overlay.innerHTML = '<div id="img-box"><div id="img-cap"></div>' +
+      '<div id="img-body"></div></div>';
+    document.body.appendChild(overlay);
+  }
+  overlay.classList.remove("hidden");
+  document.getElementById("img-cap").textContent = title + " — page " + page;
+  const body = document.getElementById("img-body");
+  body.innerHTML = '<span class="spinner"></span> Rendering page…';
+  try {
+    const r = await fetch(`/api/page-image/${docId}/${page}`, {
+      headers: { "Authorization": "Bearer " + TOKEN },
+    });
+    if (!r.ok) {
+      let m = "Could not render this page.";
+      try { m = (await r.json()).detail || m; } catch {}
+      body.textContent = m;
+      return;
+    }
+    const blob = await r.blob();
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(blob);
+    body.innerHTML = "";
+    body.appendChild(img);
+  } catch (e) {
+    body.textContent = "Error loading page image.";
+  }
 }
 
 /* ---------- Ask (SSE over fetch) ---------- */

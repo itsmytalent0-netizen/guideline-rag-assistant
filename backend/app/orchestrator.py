@@ -79,9 +79,12 @@ def build_sources(doc_hits: list[dict], web_hits: list[dict]) -> tuple[list[dict
         pages = f"p.{h['page_start']}" if h["page_start"] == h["page_end"] \
             else f"pp.{h['page_start']}-{h['page_end']}"
         label = f"{h['doc_name']} ({pages})"
+        drive_url = (f"https://drive.google.com/file/d/{h['doc_id']}/view"
+                     if h.get("doc_id") else "")
         sources.append({"n": n, "kind": "doc", "title": label, "doc_id": h["doc_id"],
                         "agency": h.get("agency", ""), "year": h.get("year", 0),
-                        "pages": pages, "url": ""})
+                        "pages": pages, "page_start": h.get("page_start", 0),
+                        "url": drive_url})
         blocks.append(f"[{n}] (Guideline) {label}\n{h['text']}")
     for w in web_hits:
         n += 1
