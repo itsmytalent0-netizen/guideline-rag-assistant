@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharma Guidelines RAG</title>
+<link rel="stylesheet" href="/static/app.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
+</head>
+<body>
+
+<!-- AUTH VIEW -->
+<div id="view-auth" class="view hidden">
+  <div class="auth-card">
+    <h1>💊 Pharma Guidelines RAG</h1>
+    <p class="muted">Search 500k+ pages of pharmaceutical guidelines — or the live web.</p>
+    <div class="tabs">
+      <button id="tab-login" class="tab active">Sign in</button>
+      <button id="tab-register" class="tab">Register</button>
+    </div>
+    <form id="auth-form">
+      <input type="email" id="auth-email" placeholder="Email" required autocomplete="email">
+      <input type="password" id="auth-password" placeholder="Password (min 8 chars)" required minlength="8">
+      <input type="text" id="auth-invite" placeholder="Invite code (if required)" class="hidden">
+      <button type="submit" id="auth-submit" class="primary">Sign in</button>
+      <div id="auth-error" class="error"></div>
+    </form>
+  </div>
+</div>
+
+<!-- MAIN VIEW -->
+<div id="view-main" class="view hidden">
+  <aside id="sidebar">
+    <div class="sidebar-head">
+      <span class="brand">💊 PharmaRAG</span>
+      <button id="btn-new-chat" title="New chat">＋</button>
+    </div>
+    <div id="session-list"></div>
+    <div class="sidebar-foot">
+      <span id="user-email" class="muted"></span>
+      <button id="btn-admin" class="hidden">Admin</button>
+      <button id="btn-apikey" title="API key for MCP clients">API key</button>
+      <button id="btn-logout">Sign out</button>
+    </div>
+  </aside>
+
+  <main id="chat-pane">
+    <div id="chat-toolbar">
+      <label>Source
+        <select id="sel-mode">
+          <option value="auto">Auto</option>
+          <option value="docs">Guidelines only</option>
+          <option value="web">Web only</option>
+        </select>
+      </label>
+      <label>Model
+        <select id="sel-model"><option value="auto">Auto (rotate free models)</option></select>
+      </label>
+      <label>Agency
+        <select id="sel-agency">
+          <option value="">All</option>
+          <option>FDA</option><option>EMA</option><option>ICH</option>
+          <option>WHO</option><option>PIC/S</option><option>MHRA</option>
+          <option>CDSCO</option><option>USP</option>
+        </select>
+      </label>
+    </div>
+    <div id="messages"></div>
+    <form id="ask-form">
+      <textarea id="ask-input" rows="2" placeholder="Ask about the guidelines… (Enter to send, Shift+Enter for newline)"></textarea>
+      <button type="submit" id="ask-btn" class="primary">Send</button>
+    </form>
+  </main>
+</div>
+
+<!-- ADMIN VIEW -->
+<div id="view-admin" class="view hidden">
+  <header class="admin-head">
+    <h2>Admin</h2>
+    <button id="btn-back">← Back to chat</button>
+  </header>
+  <nav class="tabs" id="admin-tabs">
+    <button class="tab active" data-tab="stats">Dashboard</button>
+    <button class="tab" data-tab="drives">Drives</button>
+    <button class="tab" data-tab="sync">Sync</button>
+    <button class="tab" data-tab="models">Models</button>
+    <button class="tab" data-tab="users">Users</button>
+  </nav>
+  <section id="admin-content"></section>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

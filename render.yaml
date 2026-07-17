@@ -1,0 +1,36 @@
+# Render.com Blueprint — deploys the app on the FREE tier (no credit card).
+# Render auto-detects this file when you create a "Blueprint" from the repo,
+# or you can configure a Web Service manually with the same values.
+services:
+  - type: web
+    name: pharma-rag
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-render.txt && python -c "from backend.app.rag.embeddings import warmup; warmup()"
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: EMBEDDING_BACKEND
+        value: onnx
+      - key: HF_HOME
+        value: /opt/render/project/src/.hf-cache
+      # Fill these in the Render dashboard (Environment tab) — marked sync:false
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: ZILLIZ_URI
+        sync: false
+      - key: ZILLIZ_TOKEN
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: INVITE_CODE
+        sync: false
