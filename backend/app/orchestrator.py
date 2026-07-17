@@ -54,7 +54,7 @@ async def get_active_models(db: AsyncSession) -> dict[str, list[str]]:
 
 def decide_mode(question: str, requested: str) -> str:
     """docs | web | both. Explicit user choice always wins."""
-    if requested in ("docs", "web"):
+    if requested in ("docs", "web", "both"):
         return requested
     return "both" if WEB_HINTS.search(question) else "docs"
 
